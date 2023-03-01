@@ -1,4 +1,5 @@
 import random
+import re
 
 def main():
     print(' You have 10 guesses to get it.')
@@ -22,47 +23,42 @@ def bagels():
     print(random_number)
     while True:
         try:
-            num = input('Guess the number: ')
-            if len(num) > 3:
-                raise ValueError
-            #returns random number chosen as string
-            
-            #turns into list for Fermi
-            random_number_list=list(random_number)
-            #returns input as string
-            str_num=str(num)
-            #returns input string as list for Fermi
-            str_num_list=list(str_num)
-            
-            
-            if str_num == random_number:
-                print('You Got it!')
-                break
-            elif str_num != random_number:
+            number_guess = 1
+            while number_guess <= 10:
+                num = input(f'Guess {number_guess}: ')
+                str_num=str(num)
+                if len(num) > 3:
+                    raise ValueError
+                elif not re.match('[0-9][0-9][0-9]',str_num):
+                    raise ValueError
+                    #returns random number chosen as string
+                    #turns into list for Fermi
+                random_number_list=list(random_number)
+                    #returns input string as list for Fermi
+                str_num_list=list(str_num)
+                clue_list=[]
+                    
+                    #eval
+                if str_num == random_number:
+                    print('You Got it!')
+                    break
+                   
                 for i in range(len(str_num_list)):
-                    for j in range(len(random_number_list)):
-                        if i == j:
-                            if str_num_list[i] == random_number_list[j]:
-                                print('Fermi')
-                            elif str_num_list[i] != random_number_list[j]:
-                                if str_num_list[i] in random_number_list:
-                                    print('Pico')
-                                
-                                
-                          
-
+                    if str_num_list[i] == random_number[i]:
+                        clue_list.append('Fermi')
+                    elif str_num_list[i] in random_number_list:
+                        clue_list.append('Pico')
+                clues_list=' '.join(sorted(clue_list))
+                if len(clue_list) == 0:
+                    print('Bagel')
+                elif len(clue_list) > 0:
+                    print(clues_list)
+                        
+                number_guess+=1
+                  
+                                    
+                              
+    
         except ValueError:
             pass 
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()
+    
